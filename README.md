@@ -67,10 +67,61 @@ dump-code <source_directory> [output_file.md]
   dump-code /path/to/repo
   ```
 
+---
+
+## 🔨 Customizing Ignored Files, Directories, and Extensions
+
+By default, the script ignores certain files, directories, and file extensions to avoid including unnecessary content in the Markdown export. You can **modify these lists directly within the script** by editing the following variables:
+
+### Ignored Files
+These files will be skipped regardless of their location in the repository:
+
+```bash
+local ignore_files=("package-lock.json" "yarn.lock" ".DS_Store")
+```
+
+To **add more files**, simply include them in the list:
+
+```bash
+local ignore_files=("package-lock.json" "yarn.lock" ".DS_Store" "README.md" "LICENSE")
+```
+
+---
+
+### Ignored Directories
+These directories and their contents are ignored recursively:
+
+```bash
+local ignore_dirs=(".git" "node_modules" "dist" "build" ".next" ".expo" "fonts" "docs")
+```
+
+To **add or remove directories**, edit this list. For example, to ignore `test` and `coverage` folders:
+
+```bash
+local ignore_dirs=(".git" "node_modules" "dist" "build" ".next" ".expo" "fonts" "docs" "test" "coverage")
+```
+
+---
+
+### Ignored Extensions
+These file types will be excluded from the Markdown output:
+
+```bash
+local ignore_extensions=("png" "jpg" "jpeg" "gif" "svg" "ico" "webp" "bmp" "tiff")
+```
+
+To **add new extensions**, simply include them in the list. For example, to also ignore `.mp4` and `.zip` files:
+
+```bash
+local ignore_extensions=("png" "jpg" "jpeg" "gif" "svg" "ico" "webp" "bmp" "tiff" "mp4" "zip")
+```
+
+---
+
 ## How It Works
 
 - **Directory Scanning:** The script uses the `find` command to locate all files in the provided source directory.
-- **Exclusion Rules:** It filters out specific files, directories, and file types (like images) as defined in the script.
+- **Exclusion Rules:** It filters out specific files, directories, and file types as defined above.
 - **Markdown Formatting:** For each file processed, the script adds a header with the file name and path, and wraps the file’s contents in Markdown code blocks.
 - **Self-Exclusion:** It checks and skips the output file if it resides within the source directory to avoid recursive inclusion.
 
