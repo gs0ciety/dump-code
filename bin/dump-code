@@ -1,0 +1,66 @@
+#!/usr/bin/env bash
+# dump-code:
+
+export_code_dump() {
+  local input_dir="$1"
+  local output_file="$2"
+
+
+  if [[ -z "$input_dir" ]]; then
+    echo "Use: dump-code <origin_folder> [output_file.md]"
+    exit 1
+  fi
+
+  if [[ -z "$output_file" ]]; then
+    output_file="$(pwd)/dump.md"
+  fi
+
+  local ignore_files=("package-lock.json" "yarn.lock" ".DS_Store")
+  local ignore_dirs=(".git" "node_modules" "dist" "build" ".next" ".expo" "fonts" "docs")
+  local ignore_extensions=("png" "jpg" "jpeg" "gif" "svg" "ico" "webp" "bmp" "tiff")
+
+  > "$output_file"
+
+  echo "🔍 Checking files at $input_dir ..."
+
+  local ignore_dirs_pattern=""
+  for dir in "${ignore_dirs[@]}"; do
+    ignore_dirs_pattern+=" -path \"*/$dir/*\" -prune -o"
+  done
+
+  local ignore_ext_pattern=""
+  for ext in "${ignore_extensions[@]}"; do
+    ignore_ext_pattern+=" -name \"*.$ext\" -o"
+  done
+
+  local all_files=($(eval find "$input_dir" $ignore_dirs_pattern $ignore_ext_pattern -type f -print))
+  local total_files=${#all_files[@]}
+  local processed_files=0
+
+  echo "📂 $total_files found."
+
+  for file in "${all_files[@]}"; do
+    local filename
+    filename=$(basename "$file")
+    
+    if [[ "$(realpath "$file")" == "$(realpath "$output_file")" ]]; then
+      continue
+    fi
+
+    if [[ " ${ignore_files[*]} " == *" $filename "* ]]; then
+      continue
+    fi
+
+    ((processed_files++))
+    echo "📄 Processing $processed_files of $total_files files: $file"
+
+    echo -e "\n---\n### Archivo: $filename\n**Ruta:** $file\n" >> "$output_file"
+    echo '```' >> "$output_file"
+    cat "$file" >> "$output_file"
+    echo -e '\n```' >> "$output_file"
+  done
+
+  echo "✅ Code successfully exported to: $output_file"
+}
+
+export_code_dump "$1" "$2"
