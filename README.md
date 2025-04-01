@@ -104,4 +104,3 @@ This project is licensed under the MIT License. See the [LICENSE](LICENSE) file 
 Feel free to reach out via:
 
 - GitHub: [gs0ciety](https://github.com/gs0ciety)
-- Email: your-email@example.com
