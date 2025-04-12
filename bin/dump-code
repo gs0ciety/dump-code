@@ -15,7 +15,7 @@ export_code_dump() {
     output_file="$(pwd)/dump.md"
   fi
 
-  local ignore_files=("package-lock.json" "yarn.lock" ".DS_Store")
+  local ignore_files=("package-lock.json" "yarn.lock" ".DS_Store" "pnpm-lock.yaml")
   local ignore_dirs=(".git" "node_modules" "dist" "build" ".next" ".expo" "fonts" "docs")
   local ignore_extensions=("png" "jpg" "jpeg" "gif" "svg" "ico" "webp" "bmp" "tiff")
 
